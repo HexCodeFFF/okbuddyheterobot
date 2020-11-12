@@ -1,3 +1,6 @@
+import sys
+import traceback
+
 import discord
 from discord.ext import commands
 import asyncio
@@ -7,7 +10,14 @@ import re
 from functools import wraps
 import random
 from py_expression_eval import Parser
+import praw
+import itertools
 
+reddit = praw.Reddit(
+    client_id="-5OEySRzJgxoxw",
+    client_secret="4lx7sD16C_Yh9Lmn_eh7qEvbM58Ksw",
+    user_agent="python lol"
+)
 # initialize
 parser = Parser()
 logging.basicConfig(format='%(levelname)s:[%(asctime)s] %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
@@ -28,6 +38,18 @@ with open('adminhelp.txt') as f:
 def save_db():
     with open('db.json', 'w') as outfile:
         json.dump(db, outfile, indent=4)
+
+
+def random_from_reddit(subreddit):
+    random_submission = reddit.subreddit(subreddit).random()
+    if random_submission is None:  # subreddit does not support random sort :/
+        random_submission = reddit.subreddit(subreddit).top("month")
+        rand = random.randint(0, 100)
+        random_submission = list(itertools.islice(random_submission, rand, rand + 1, 1))[0]
+    if random_submission.over_18:
+        return f"NSFW! ||{random_submission.url}||"
+    else:
+        return random_submission.url
 
 
 def is_authorized(function):
@@ -62,6 +84,23 @@ async def on_ready():
 @bot.command()
 async def help(ctx):
     await ctx.send(helptxt)
+
+
+@bot.command()
+async def catboy(ctx):
+    await ctx.send(random_from_reddit("nekoboys"))
+
+
+@bot.command()
+async def femboy(ctx):
+    await ctx.channel.trigger_typing()
+    await ctx.send(random_from_reddit("femboy"))
+
+
+@bot.command()
+async def randomreddit(ctx, subreddit):
+    await ctx.channel.trigger_typing()
+    await ctx.send(random_from_reddit(subreddit))
 
 
 @bot.command()
@@ -148,7 +187,7 @@ async def diceparse(ctx, *, arg):
 # admin only commands
 @bot.command()
 @is_authorized
-async def adminhelp(ctx, *, arg):
+async def adminhelp(ctx):
     await ctx.send(adminhelptxt)
 
 
@@ -327,7 +366,7 @@ async def on_message(msg):
 @bot.listen()
 async def on_command_error(ctx, error):
     await ctx.send(str(error).replace("@", "\\@"))
-    logging.error(error)
+    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
 
 
 with open('token.txt') as f:  # not on github for obvious reasons
