@@ -1,0 +1,9 @@
+**Admin only commands:**
+- **d!addadmin** [user(s)] - adds one or more users to the admin list
+- **d!removeadmin** [user(s)] - removes one or more users from the admin list
+- **d!listadmins** - lists current admins **THIS WILL PING ALL ADDED ADMINS!**
+- **d!addchannel** [channel(s)] - adds one or more channels to the auto upvote/downvote reaction list
+- **d!removechannel** [channel(s)] - removes one or more channels from the auto upvote/downvote reaction list
+- **d!listtchannels** - lists current auto-reaction channels
+- **d!addmacro** [name] [content] - adds macro
+- **d!removemacro** [name] - removes macro
