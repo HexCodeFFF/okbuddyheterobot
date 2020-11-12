@@ -318,7 +318,15 @@ async def edit(ctx, msgid, *, content):
 @bot.command()
 @commands.is_owner()
 async def pin(ctx, msgid):
-    await ctx.channel.fetch_message(msgid).pin()
+    msg = await ctx.channel.fetch_message(msgid)
+    await msg.pin()
+
+
+@bot.command()
+@commands.is_owner()
+async def unpin(ctx, msgid):
+    msg = await ctx.channel.fetch_message(msgid)
+    await msg.unpin()
 
 
 @bot.listen()
