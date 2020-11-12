@@ -315,6 +315,12 @@ async def edit(ctx, msgid, *, content):
     await msg.edit(content=content)
 
 
+@bot.command()
+@commands.is_owner()
+async def pin(ctx, msgid):
+    await ctx.channel.fetch_message(msgid).pin()
+
+
 @bot.listen()
 async def on_message(msg):
     if str(msg.channel.id) in db["channels"]:  # suggestions-meta
