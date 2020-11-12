@@ -95,37 +95,9 @@ async def macro(ctx, name="list"):
         await ctx.send("That macro does not exist.")
 
 
-# authorized/admin commands
-@bot.command()
-@is_authorized
-async def addmacro(ctx, name, *, content):
-    if name in db["macros"]:
-        out = f"🔅 Macro `{name}` already exists."
-    else:
-        db["macros"][name] = content
-        out = f"✅ Added macro `{name}`."
-    save_db()
-    logging.info(out)
-    await ctx.send(out)
-
-
-@bot.command()
-@is_authorized
-async def removemacro(ctx, name):
-    if name in db["macros"]:
-        del db["macros"][name]
-        out = f"✅ Removed macro `{name}`"
-    else:
-        out = f"❌ Macro `{name}` does not exist."
-
-    save_db()
-    logging.info(out)
-    await ctx.send(out)
-
-
 @bot.command()
 async def featurerequest(ctx, *, feature):
-    if ctx.author.id == 776512576338788374:  # annoying cunt
+    if ctx.author.id == "776512576338788374":  # annoying cunt
         await ctx.send("shut the hell up sophia")
     else:
         await bot.get_user(214511018204725248).send(f"<@{ctx.author.id}> Requests:\n>>> {feature}")
@@ -173,10 +145,38 @@ async def diceparse(ctx, *, arg):
         await ctx.send(f"{out}{arg}\n**{final}**")
 
 
+# admin only commands
 @bot.command()
 @is_authorized
 async def adminhelp(ctx, *, arg):
     await ctx.send(adminhelptxt)
+
+
+@bot.command()
+@is_authorized
+async def addmacro(ctx, name, *, content):
+    if name in db["macros"]:
+        out = f"🔅 Macro `{name}` already exists."
+    else:
+        db["macros"][name] = content
+        out = f"✅ Added macro `{name}`."
+    save_db()
+    logging.info(out)
+    await ctx.send(out)
+
+
+@bot.command()
+@is_authorized
+async def removemacro(ctx, name):
+    if name in db["macros"]:
+        del db["macros"][name]
+        out = f"✅ Removed macro `{name}`"
+    else:
+        out = f"❌ Macro `{name}` does not exist."
+
+    save_db()
+    logging.info(out)
+    await ctx.send(out)
 
 
 @bot.command()
@@ -327,4 +327,6 @@ async def on_command_error(ctx, error):
     logging.error(error)
 
 
-bot.run("Nzc2MTgyMzM3MDEyMTA1MjY2.X6xKIQ.Qz3U7-aBR8cbO22bjQJUdb42YwE")
+with open('token.txt') as f:
+    token = f.read()
+bot.run(token)
