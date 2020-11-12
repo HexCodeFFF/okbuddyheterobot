@@ -97,7 +97,7 @@ async def macro(ctx, name="list"):
 
 @bot.command()
 async def featurerequest(ctx, *, feature):
-    if ctx.author.id == "776512576338788374":  # annoying cunt
+    if int(ctx.author.id) == 776512576338788374:  # annoying cunt
         await ctx.send("shut the hell up sophia")
     else:
         await bot.get_user(214511018204725248).send(f"<@{ctx.author.id}> Requests:\n>>> {feature}")
@@ -297,7 +297,10 @@ async def testreaction(ctx):
 @bot.command()
 @commands.is_owner()
 async def say(ctx, *, msg):
-    await ctx.message.delete()
+    try:
+        await ctx.message.delete()
+    except Exception as e:
+        pass
     await ctx.channel.send(msg)
 
 
@@ -313,20 +316,6 @@ async def edit(ctx, msgid, *, content):
     await ctx.message.delete()
     msg = await ctx.channel.fetch_message(int(msgid))
     await msg.edit(content=content)
-
-
-@bot.command()
-@commands.is_owner()
-async def pin(ctx, msgid):
-    msg = await ctx.channel.fetch_message(msgid)
-    await msg.pin()
-
-
-@bot.command()
-@commands.is_owner()
-async def unpin(ctx, msgid):
-    msg = await ctx.channel.fetch_message(msgid)
-    await msg.unpin()
 
 
 @bot.listen()
