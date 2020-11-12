@@ -327,6 +327,6 @@ async def on_command_error(ctx, error):
     logging.error(error)
 
 
-with open('token.txt') as f:
+with open('token.txt') as f:  # not on github for obvious reasons
     token = f.read()
 bot.run(token)
