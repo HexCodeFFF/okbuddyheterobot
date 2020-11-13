@@ -47,7 +47,7 @@ def random_from_reddit(subreddit):
         rand = random.randint(0, 100)
         random_submission = list(itertools.islice(random_submission, rand, rand + 1, 1))[0]
     if random_submission.over_18:
-        return f"NSFW! ||{random_submission.url}||"
+        return f"Random post was NSFW, try again :/"
     else:
         return random_submission.url
 
