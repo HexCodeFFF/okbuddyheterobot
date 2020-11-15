@@ -15,6 +15,9 @@ import praw
 import itertools
 from discord.ext.commands.cooldowns import BucketType  # for cooldown? idfk
 
+intents = discord.Intents.default()
+intents.members = True
+
 reddit = praw.Reddit(
     client_id="-5OEySRzJgxoxw",
     client_secret="4lx7sD16C_Yh9Lmn_eh7qEvbM58Ksw",
@@ -26,7 +29,7 @@ logging.basicConfig(format='%(levelname)s:[%(asctime)s] %(message)s', datefmt='%
                     level=logging.INFO)
 logging.info(f"Discord Version {discord.__version__}")
 logging.info("Initalizing")
-bot = commands.Bot(command_prefix='d!', description='okbuddyhetero bot')
+bot = commands.Bot(command_prefix='d!', description='okbuddyhetero bot', intents=intents)
 bot.remove_command('help')
 with open('db.json', encoding='utf-8') as f:
     db = json.load(f)
@@ -91,6 +94,31 @@ def is_authorized(function):
     return wrapper
 
 
+async def reassign_gen3(toadd="random", toremove="random"):
+    okbh = bot.get_guild(746458625068892333)
+    gen3role = okbh.get_role(777378971850506272)
+    if toremove == "random":
+        while True:
+            memb = random.choice(okbh.members)
+            if gen3role in memb.roles and memb.id != 214511018204725248 and memb.id != 776182337012105266:
+                toremove = memb
+                break
+    else:
+        toremove = okbh.get_member(int(toremove))
+    if toadd == "random":
+        while True:
+            memb = random.choice(okbh.members)
+            if gen3role not in memb.roles:
+                toadd = memb
+                break
+    else:
+        toadd = okbh.get_member(int(toadd))
+    logging.info(f"gen-3: adding {toadd.display_name} and removing {toremove.display_name}")
+    await toremove.remove_roles(gen3role)
+    await toadd.add_roles(gen3role)
+    return [toadd, toremove]
+
+
 async def reactionfunction(msg):
     await msg.add_reaction(bot.get_emoji(746881074583437352))  # okbh upvote
     await msg.add_reaction(bot.get_emoji(746881238752690268))  # okbh downvote
@@ -110,7 +138,9 @@ async def on_ready():
     game = discord.Activity(name=f"d!help | r/okbh bot",
                             type=discord.ActivityType.listening)
     await bot.change_presence(activity=game)
-    # while not bot.is_closed():
+    while not bot.is_closed():
+        await asyncio.sleep(60 * 60)
+        await reassign_gen3()
 
 
 # @everyone commands
@@ -264,6 +294,13 @@ async def adminhelp(ctx):
 
 @bot.command()
 @is_authorized
+async def forcegen3(ctx, toadd="random", toremove="random"):
+    members = await reassign_gen3(toadd, toremove)
+    await ctx.send(f"Added {members[0].display_name} and removed {members[1].display_name}")
+
+
+@bot.command()
+@is_authorized
 async def addmacro(ctx, name, *, content):
     if name in db["macros"]:
         out = f"🔅 Macro `{name}` already exists."
@@ -401,6 +438,18 @@ async def listadmins(ctx):
 @is_authorized
 async def testreaction(ctx):
     await reactionfunction(ctx.message)
+
+
+@bot.command()
+@is_authorized
+async def listgen3(ctx):
+    okbh = bot.get_guild(746458625068892333)
+    gen3role = okbh.get_role(777378971850506272)
+    gen3s = []
+    for member in okbh.members:
+        if gen3role in member.roles:
+            gen3s.append(member.display_name)
+    await ctx.send(f"There are {len(gen3s)} members in gen 3:\n{','.join(gen3s)}")
 
 
 # owner commands

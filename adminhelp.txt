@@ -7,4 +7,6 @@
 - **d!listtchannels** - lists current auto-reaction channels
 - **d!addmacro** [name] [content] - adds macro
 - **d!removemacro** [name] - removes macro
+- **d!forcegen3** (toadd id) (toremove id) - forces the hourly reassignment of gen 3. optionally you can choose an ID of a member to add or remove
+- **d!listgen3** - lists all members with the gen 3 role.
 **Bot written by Melody**
