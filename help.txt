@@ -2,7 +2,7 @@
 - **d!featurerequest** [feature] - dms the bot owner with the feature
 - **d!m** [macro] - funny text oga,,, do just `d!m` to list all macros
 - **d!owoify** (content) - uwu owo this makes the text vewy pwetty
-- **d!femboy** - grabs a random femboy from r/femboy
-- **d!catboy** - grabs a random catboy from r/nekoboys
+- **d!femboy** - sends a femboy
+- **d!catboy** - sends a catboy
 - **d!randomreddit** [subreddit] - grabs a random post from `subreddit`
 - **d!adminhelp** - shows admin commands

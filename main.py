@@ -1,3 +1,4 @@
+import os
 import sys
 import traceback
 
@@ -32,6 +33,26 @@ with open('help.txt') as f:
     helptxt = f.read()
 with open('adminhelp.txt') as f:
     adminhelptxt = f.read()
+regionals = {'a': '\N{REGIONAL INDICATOR SYMBOL LETTER A}', 'b': '\N{REGIONAL INDICATOR SYMBOL LETTER B}',
+             'c': '\N{REGIONAL INDICATOR SYMBOL LETTER C}',
+             'd': '\N{REGIONAL INDICATOR SYMBOL LETTER D}', 'e': '\N{REGIONAL INDICATOR SYMBOL LETTER E}',
+             'f': '\N{REGIONAL INDICATOR SYMBOL LETTER F}',
+             'g': '\N{REGIONAL INDICATOR SYMBOL LETTER G}', 'h': '\N{REGIONAL INDICATOR SYMBOL LETTER H}',
+             'i': '\N{REGIONAL INDICATOR SYMBOL LETTER I}',
+             'j': '\N{REGIONAL INDICATOR SYMBOL LETTER J}', 'k': '\N{REGIONAL INDICATOR SYMBOL LETTER K}',
+             'l': '\N{REGIONAL INDICATOR SYMBOL LETTER L}',
+             'm': '\N{REGIONAL INDICATOR SYMBOL LETTER M}', 'n': '\N{REGIONAL INDICATOR SYMBOL LETTER N}',
+             'o': '\N{REGIONAL INDICATOR SYMBOL LETTER O}',
+             'p': '\N{REGIONAL INDICATOR SYMBOL LETTER P}', 'q': '\N{REGIONAL INDICATOR SYMBOL LETTER Q}',
+             'r': '\N{REGIONAL INDICATOR SYMBOL LETTER R}',
+             's': '\N{REGIONAL INDICATOR SYMBOL LETTER S}', 't': '\N{REGIONAL INDICATOR SYMBOL LETTER T}',
+             'u': '\N{REGIONAL INDICATOR SYMBOL LETTER U}',
+             'v': '\N{REGIONAL INDICATOR SYMBOL LETTER V}', 'w': '\N{REGIONAL INDICATOR SYMBOL LETTER W}',
+             'x': '\N{REGIONAL INDICATOR SYMBOL LETTER X}',
+             'y': '\N{REGIONAL INDICATOR SYMBOL LETTER Y}', 'z': '\N{REGIONAL INDICATOR SYMBOL LETTER Z}',
+             '0': '0⃣', '1': '1⃣', '2': '2⃣', '3': '3⃣',
+             '4': '4⃣', '5': '5⃣', '6': '6⃣', '7': '7⃣', '8': '8⃣', '9': '9⃣', '!': '\u2757',
+             '?': '\u2753'}
 
 
 # functions
@@ -39,6 +60,8 @@ def save_db():
     with open('db.json', 'w') as outfile:
         json.dump(db, outfile, indent=4)
 
+
+# formerly used for d!catboy and d!femboy commands, some images were lewd so this has to be changed :/
 
 def random_from_reddit(subreddit):
     random_submission = reddit.subreddit(subreddit).random()
@@ -50,6 +73,10 @@ def random_from_reddit(subreddit):
         return f"Random post was NSFW, try again :/"
     else:
         return random_submission.url
+
+
+def random_from_folder(folder):
+    return f"{folder}/{random.choice(os.listdir(folder))}"
 
 
 def is_authorized(function):
@@ -66,6 +93,11 @@ def is_authorized(function):
 async def reactionfunction(msg):
     await msg.add_reaction(bot.get_emoji(746881074583437352))  # okbh upvote
     await msg.add_reaction(bot.get_emoji(746881238752690268))  # okbh downvote
+    # for emoji in random.choice(
+    #         ["PENISHA", "1984", "amongus", "bigsex", "10ogecs", "gay", "oga", "why", "no", "yes", "redit", "gen1",
+    #          "naruto", "help", "modsl", "l", "fortnie", "ROSEBAD", "bigcoke", "monke", "trol", "cum", "golira",
+    #          "doge","thanks","uh"]):
+    #     await msg.add_reaction(regionals[emoji.lower()] if emoji.isalnum() or emoji in ["!", "?"] else emoji)
     # await msg.add_reaction(bot.get_emoji(776226766640513045))  # ztools2 upvote
     # await msg.add_reaction(bot.get_emoji(776226783103942656))  # ztools2 downvote
 
@@ -87,14 +119,32 @@ async def help(ctx):
 
 
 @bot.command()
+async def regional(ctx, *, msg):
+    """Replace letters with regional indicator emojis"""
+    await ctx.message.delete()
+    msg = list(msg)
+    regional_list = [regionals[x.lower()] if x.isalnum() or x in ["!", "?"] else x for x in msg]
+    regional_output = '\u200b'.join(regional_list)
+    await ctx.send(regional_output)
+
+
+@bot.command()
 async def catboy(ctx):
-    await ctx.send(random_from_reddit("nekoboys"))
+    await ctx.channel.trigger_typing()
+    await ctx.send(file=discord.File(random_from_folder("catboys")))
+
+
+# await ctx.send(random_from_reddit("nekoboys"))
 
 
 @bot.command()
 async def femboy(ctx):
     await ctx.channel.trigger_typing()
-    await ctx.send(random_from_reddit("femboy"))
+    await ctx.send(file=discord.File(random_from_folder("femboys")))
+
+
+# await ctx.channel.trigger_typing()
+# await ctx.send(random_from_reddit("femboy"))
 
 
 @bot.command()
@@ -365,8 +415,8 @@ async def on_message(msg):
 
 @bot.listen()
 async def on_command_error(ctx, error):
-    await ctx.send(str(error).replace("@", "\\@"))
     traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+    await ctx.send(str(error).replace("@", "\\@"))
 
 
 with open('token.txt') as f:  # not on github for obvious reasons
