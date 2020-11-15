@@ -27,11 +27,11 @@ logging.info(f"Discord Version {discord.__version__}")
 logging.info("Initalizing")
 bot = commands.Bot(command_prefix='d!', description='okbuddyhetero bot')
 bot.remove_command('help')
-with open('db.json') as f:
+with open('db.json', encoding='utf-8') as f:
     db = json.load(f)
-with open('help.txt') as f:
+with open('help.txt', encoding='utf-8') as f:
     helptxt = f.read()
-with open('adminhelp.txt') as f:
+with open('adminhelp.txt', encoding='utf-8') as f:
     adminhelptxt = f.read()
 regionals = {'a': '\N{REGIONAL INDICATOR SYMBOL LETTER A}', 'b': '\N{REGIONAL INDICATOR SYMBOL LETTER B}',
              'c': '\N{REGIONAL INDICATOR SYMBOL LETTER C}',
@@ -119,9 +119,11 @@ async def help(ctx):
 
 
 @bot.command()
-async def regional(ctx, *, msg):
+async def regional(ctx, *, msg="above"):
+    if msg == "above":
+        messages = await ctx.channel.history(limit=1, before=ctx.message).flatten()
+        msg = messages[0].content
     """Replace letters with regional indicator emojis"""
-    await ctx.message.delete()
     msg = list(msg)
     regional_list = [regionals[x.lower()] if x.isalnum() or x in ["!", "?"] else x for x in msg]
     regional_output = '\u200b'.join(regional_list)
@@ -132,19 +134,15 @@ async def regional(ctx, *, msg):
 async def catboy(ctx):
     await ctx.channel.trigger_typing()
     await ctx.send(file=discord.File(random_from_folder("catboys")))
-
-
-# await ctx.send(random_from_reddit("nekoboys"))
+    # await ctx.send(random_from_reddit("nekoboys"))
 
 
 @bot.command()
 async def femboy(ctx):
     await ctx.channel.trigger_typing()
     await ctx.send(file=discord.File(random_from_folder("femboys")))
-
-
-# await ctx.channel.trigger_typing()
-# await ctx.send(random_from_reddit("femboy"))
+    # await ctx.channel.trigger_typing()
+    # await ctx.send(random_from_reddit("femboy"))
 
 
 @bot.command()
@@ -160,6 +158,14 @@ async def owoify(ctx, *, text="above"):
         text = messages[0].content
     await ctx.send(
         text.replace("r", "w").replace("R", "W").replace("l", "w").replace("L", "W").replace("@", "\\@") + " owo~")
+
+
+@bot.command()
+async def sparkle(ctx, *, text="above"):
+    if text == "above":
+        messages = await ctx.channel.history(limit=1, before=ctx.message).flatten()
+        text = messages[0].content
+    await ctx.send(f"✨ *{' '.join(text)}* ✨")
 
 
 @bot.command(name="8ball")
@@ -185,10 +191,14 @@ async def macro(ctx, name="list"):
 
 
 @bot.command()
-async def featurerequest(ctx, *, feature):
+async def request(ctx, *, feature):
     if int(ctx.author.id) == 776512576338788374:  # annoying cunt
         await ctx.send("shut the hell up sophia")
     else:
+        if len(ctx.message.attachments) > 0:
+            feature += "\nAttached files: "
+            for attach in ctx.message.attachments:
+                feature += attach.url + " "
         await bot.get_user(214511018204725248).send(f"<@{ctx.author.id}> Requests:\n>>> {feature}")
         await ctx.send("✅ Requested!")
 
@@ -356,11 +366,11 @@ async def removeadmin(ctx, *, arg):
 @is_authorized
 async def listchannels(ctx):
     if db["channels"]:
-        out = "Registered channels:\n"
+        out = "💬 Registered channels:\n"
         for ch in db["channels"]:
             out += f"- <#{ch}>\n"
     else:
-        out = "No channels registered."
+        out = "❌ No channels registered."
     await ctx.send(out)
 
 
@@ -368,11 +378,11 @@ async def listchannels(ctx):
 @is_authorized
 async def listadmins(ctx):
     if db["admins"]:
-        out = "Registered admins:\n"
+        out = "💬 Registered admins:\n"
         for ch in db["admins"]:
             out += f"- <@{ch}>\n"
     else:
-        out = "No admins registered."
+        out = "❌ No admins registered."
     await ctx.send(out)
 
 
@@ -391,6 +401,13 @@ async def say(ctx, *, msg):
     except Exception as e:
         pass
     await ctx.channel.send(msg)
+
+
+@bot.command()
+@commands.is_owner()
+async def nick(ctx, *, nickname="gay ass doge"):
+    await ctx.guild.get_member(bot.user.id).edit(nick=nickname)
+    await ctx.send(f"✅ Changed nickname to `{nickname}`")
 
 
 @bot.command()
@@ -416,7 +433,7 @@ async def on_message(msg):
 @bot.listen()
 async def on_command_error(ctx, error):
     traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
-    await ctx.send(str(error).replace("@", "\\@"))
+    await ctx.send("‼ **Error!** ```" + str(error).replace("@", "\\@") + "```")
 
 
 with open('token.txt') as f:  # not on github for obvious reasons

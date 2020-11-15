@@ -7,3 +7,4 @@
 - **d!listtchannels** - lists current auto-reaction channels
 - **d!addmacro** [name] [content] - adds macro
 - **d!removemacro** [name] - removes macro
+**Bot written by Melody**

@@ -1,8 +1,11 @@
 - **d!dice** [dice] - parses dice for DnD play and other purposes. Example: `d!dice d20+5`
-- **d!featurerequest** [feature] - dms the bot owner with the feature
 - **d!m** [macro] - funny text oga,,, do just `d!m` to list all macros
-- **d!owoify** (content) - uwu owo this makes the text vewy pwetty
+- **d!regional** (text) - make text :regional_indicator_b:​:regional_indicator_i:​:regional_indicator_g:
+- **d!owoify** (content) - repwaces aww L and R with W uwu~
+- **d!sparkle** (content) - ✨ *f a n c y    t e x t* ✨
 - **d!femboy** - sends a femboy
 - **d!catboy** - sends a catboy
 - **d!randomreddit** [subreddit] - grabs a random post from `subreddit`
+- **d!request** [feature] - request new commands or images for the femboy/catboy commands. attachments are supported.
 - **d!adminhelp** - shows admin commands
+**Bot written by Melody**
