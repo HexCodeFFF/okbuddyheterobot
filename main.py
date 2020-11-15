@@ -182,7 +182,7 @@ async def eightball(ctx, *, question=""):
     await ctx.send("shut the hell up")
 
 
-@commands.cooldown(3, 5, BucketType.user)
+@commands.cooldown(3, 15, BucketType.user)
 @bot.command(name="m")
 async def macro(ctx, name="list"):
     if name == "list":
