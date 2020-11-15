@@ -455,10 +455,10 @@ async def listgen3(ctx):
 # owner commands
 @bot.command()
 @commands.is_owner()
-async def addgen3(ctx, id):
+async def addgen3(ctx, membid):
     okbh = bot.get_guild(746458625068892333)
     gen3role = okbh.get_role(777378971850506272)
-    await okbh.get_member(id).add_roles(gen3role)
+    await okbh.get_member(int(membid)).add_roles(gen3role)
     await ctx.send("ok")
 
 
@@ -491,6 +491,20 @@ async def edit(ctx, msgid, *, content):
     await ctx.message.delete()
     msg = await ctx.channel.fetch_message(int(msgid))
     await msg.edit(content=content)
+
+
+@bot.command()
+@commands.is_owner()
+async def delete(ctx, msgid):
+    msg = await ctx.channel.fetch_message(int(msgid))
+    await msg.delete()
+
+
+@bot.command()
+@commands.is_owner()
+async def pin(ctx, msgid):
+    msg = await ctx.channel.fetch_message(int(msgid))
+    await msg.pin()
 
 
 @bot.listen()
