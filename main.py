@@ -13,6 +13,7 @@ import random
 from py_expression_eval import Parser
 import praw
 import itertools
+from discord.ext.commands.cooldowns import BucketType  # for cooldown? idfk
 
 reddit = praw.Reddit(
     client_id="-5OEySRzJgxoxw",
@@ -113,11 +114,13 @@ async def on_ready():
 
 
 # @everyone commands
+@commands.cooldown(1, 10, BucketType.user)
 @bot.command()
 async def help(ctx):
     await ctx.send(helptxt)
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def regional(ctx, *, msg="above"):
     if msg == "above":
@@ -130,6 +133,7 @@ async def regional(ctx, *, msg="above"):
     await ctx.send(regional_output)
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def catboy(ctx):
     await ctx.channel.trigger_typing()
@@ -137,6 +141,7 @@ async def catboy(ctx):
     # await ctx.send(random_from_reddit("nekoboys"))
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def femboy(ctx):
     await ctx.channel.trigger_typing()
@@ -145,12 +150,14 @@ async def femboy(ctx):
     # await ctx.send(random_from_reddit("femboy"))
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def randomreddit(ctx, subreddit):
     await ctx.channel.trigger_typing()
     await ctx.send(random_from_reddit(subreddit))
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def owoify(ctx, *, text="above"):
     if text == "above":
@@ -160,6 +167,7 @@ async def owoify(ctx, *, text="above"):
         text.replace("r", "w").replace("R", "W").replace("l", "w").replace("L", "W").replace("@", "\\@") + " owo~")
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def sparkle(ctx, *, text="above"):
     if text == "above":
@@ -168,11 +176,13 @@ async def sparkle(ctx, *, text="above"):
     await ctx.send(f"✨ *{' '.join(text)}* ✨")
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command(name="8ball")
 async def eightball(ctx, *, question=""):
     await ctx.send("shut the hell up")
 
 
+@commands.cooldown(3, 5, BucketType.user)
 @bot.command(name="m")
 async def macro(ctx, name="list"):
     if name == "list":
@@ -190,6 +200,7 @@ async def macro(ctx, name="list"):
         await ctx.send("That macro does not exist.")
 
 
+@commands.cooldown(1, 5, BucketType.user)
 @bot.command()
 async def request(ctx, *, feature):
     if int(ctx.author.id) == 776512576338788374:  # annoying cunt
