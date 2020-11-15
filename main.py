@@ -260,7 +260,7 @@ async def addmacro(ctx, name, *, content):
         db["macros"][name] = content
         out = f"✅ Added macro `{name}`."
     save_db()
-    logging.info(out)
+    logging.info(out.strip())
     await ctx.send(out)
 
 
@@ -274,7 +274,7 @@ async def removemacro(ctx, name):
         out = f"❌ Macro `{name}` does not exist."
 
     save_db()
-    logging.info(out)
+    logging.info(out.strip())
     await ctx.send(out)
 
 
@@ -295,7 +295,7 @@ async def addchannel(ctx, *, arg):
             else:
                 out += f"❌ {ch} is not a valid channel id.\n"
         save_db()
-        logging.info(out)
+        logging.info(out.strip())
         await ctx.send(out.strip())
     else:
         await ctx.send("❌ Invalid parameter. Please link a channel or send it's ID. You can do multiple at once.")
@@ -314,7 +314,7 @@ async def removechannel(ctx, *, arg):
             else:
                 out += f"❌ <#{ch}> was not registered.\n"
         save_db()
-        logging.info(out)
+        logging.info(out.strip())
         await ctx.send(out.strip())
     else:
         await ctx.send("❌ Invalid parameter. Please link a channel or send it's ID. You can do multiple at once.")
@@ -428,6 +428,12 @@ async def edit(ctx, msgid, *, content):
 async def on_message(msg):
     if str(msg.channel.id) in db["channels"]:  # suggestions-meta
         await reactionfunction(msg)
+
+
+@bot.listen()
+async def on_command(ctx):
+    logging.info(f"@{ctx.message.author.name}#{ctx.message.author.discriminator} ({ctx.message.author.display_name}) "
+                 f"ran command '{ctx.message.content}' in channel #{ctx.channel.name} in server {ctx.guild}")
 
 
 @bot.listen()
