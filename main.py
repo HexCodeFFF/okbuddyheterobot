@@ -97,6 +97,7 @@ def is_authorized(function):
 async def reassign_gen3(toadd="random", toremove="random"):
     okbh = bot.get_guild(746458625068892333)
     gen3role = okbh.get_role(777378971850506272)
+    gen3 = okbh.get_channel(777186916432347136)
     if toremove == "random":
         while True:
             memb = random.choice(okbh.members)
@@ -116,6 +117,7 @@ async def reassign_gen3(toadd="random", toremove="random"):
     logging.info(f"gen-3: adding {toadd.display_name} and removing {toremove.display_name}")
     await toremove.remove_roles(gen3role)
     await toadd.add_roles(gen3role)
+    await gen3.send(f"{toremove.mention} has been replaced by {toadd.mention}!")
     return [toadd, toremove]
 
 
