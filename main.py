@@ -455,6 +455,15 @@ async def listgen3(ctx):
 # owner commands
 @bot.command()
 @commands.is_owner()
+async def addgen3(ctx, id):
+    okbh = bot.get_guild(746458625068892333)
+    gen3role = okbh.get_role(777378971850506272)
+    await okbh.get_member(id).add_roles(gen3role)
+    await ctx.send("ok")
+
+
+@bot.command()
+@commands.is_owner()
 async def say(ctx, *, msg):
     try:
         await ctx.message.delete()
