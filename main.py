@@ -454,6 +454,11 @@ async def listgen3(ctx):
     await ctx.send(f"There are {len(gen3s)} members in gen 3:\n{','.join(gen3s)}")
 
 
+@bot.command()
+@is_authorized
+async def force_reaction(ctx, channelid: int, msgid: int):
+    await reactionfunction(await bot.get_channel(channelid).fetch_message(msgid))
+
 # owner commands
 @bot.command()
 @commands.is_owner()
@@ -461,6 +466,15 @@ async def addgen3(ctx, membid):
     okbh = bot.get_guild(746458625068892333)
     gen3role = okbh.get_role(777378971850506272)
     await okbh.get_member(int(membid)).add_roles(gen3role)
+    await ctx.send("ok")
+
+
+@bot.command()
+@commands.is_owner()
+async def giverole(ctx, roleid: int):
+    role = ctx.guild.get_role(roleid)
+    me = ctx.guild.get_member(bot.user.id)
+    await me.add_roles(role)
     await ctx.send("ok")
 
 

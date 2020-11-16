@@ -9,4 +9,5 @@
 - **d!removemacro** [name] - removes macro
 - **d!forcegen3** (toadd id) (toremove id) - forces the hourly reassignment of gen 3. optionally you can choose an ID of a member to add or remove
 - **d!listgen3** - lists all members with the gen 3 role.
+- **d!forcereaction** [channelid] [msgid] - adds the upvote/downvote reactions to message with id `msgid` in channel `channelid`
 **Bot written by Melody**
