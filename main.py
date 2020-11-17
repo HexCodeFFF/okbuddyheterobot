@@ -185,8 +185,11 @@ async def femboy(ctx):
 @commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def randomreddit(ctx, subreddit):
+    '''
     await ctx.channel.trigger_typing()
     await ctx.send(random_from_reddit(subreddit))
+    '''
+    await ctx.send("Sorry, this command is temporarily disabled at okbh admin's request.")
 
 
 @commands.cooldown(3, 5, BucketType.user)
@@ -458,6 +461,7 @@ async def listgen3(ctx):
 @is_authorized
 async def force_reaction(ctx, channelid: int, msgid: int):
     await reactionfunction(await bot.get_channel(channelid).fetch_message(msgid))
+    await ctx.send("ok")
 
 # owner commands
 @bot.command()
