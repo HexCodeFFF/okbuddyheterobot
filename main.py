@@ -1,6 +1,7 @@
 import os
 import sys
 import traceback
+from datetime import datetime
 
 import discord
 from discord.ext import commands
@@ -25,8 +26,11 @@ reddit = praw.Reddit(
 )
 # initialize
 parser = Parser()
-logging.basicConfig(format='%(levelname)s:[%(asctime)s] %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
-                    level=logging.INFO)
+log_file = "log/" + str(datetime.utcnow().strftime('%Hh%Mm-%dd%mm%yy')) + '.log'
+logging.basicConfig(format='%(levelname)s [%(asctime)s] %(message)s',
+                    datefmt='%m/%d/%Y %I:%M:%S%p', level=logging.INFO,
+                    handlers=[logging.FileHandler(log_file, encoding='utf-8'), logging.StreamHandler()])
+logging.info(f"Logging to {log_file}")
 logging.info(f"Discord Version {discord.__version__}")
 logging.info("Initalizing")
 bot = commands.Bot(command_prefix='d!', description='okbuddyhetero bot', intents=intents)
@@ -89,7 +93,7 @@ def is_authorized(function):
         if str(ctx.author.id) in db["admins"]:
             await function(ctx, *args, **kwargs)
         else:
-            await ctx.channel.send("You are not authorized to use this command.")
+            await ctx.channel.send("❌ You are not authorized to use this command.")
 
     return wrapper
 
@@ -189,7 +193,7 @@ async def randomreddit(ctx, subreddit):
     await ctx.channel.trigger_typing()
     await ctx.send(random_from_reddit(subreddit))
     '''
-    await ctx.send("Sorry, this command is temporarily disabled at okbh admin's request.")
+    await ctx.send("❌ Sorry, this command is temporarily disabled at okbh admin's request.")
 
 
 @commands.cooldown(3, 5, BucketType.user)
@@ -223,16 +227,16 @@ async def macro(ctx, name="list"):
     if name == "list":
         k = db["macros"].keys()
         if k:
-            out = "Available macros:\n"
+            out = "📃 Available macros:\n"
             for m in k:
                 out += f"`{m}`, "
             await ctx.send(out.rstrip(", "))
         else:
-            await ctx.send("No macros available")
+            await ctx.send("❌ No macros available")
     elif name in db["macros"]:
         await ctx.send(db["macros"][name])
     else:
-        await ctx.send("That macro does not exist.")
+        await ctx.send(f"❌ Macro `{name}` does not exist.")
 
 
 @commands.cooldown(1, 5, BucketType.user)
@@ -301,7 +305,7 @@ async def adminhelp(ctx):
 @is_authorized
 async def forcegen3(ctx, toadd="random", toremove="random"):
     members = await reassign_gen3(toadd, toremove)
-    await ctx.send(f"Added {members[0].display_name} and removed {members[1].display_name}")
+    await ctx.send(f"✅ Done")
 
 
 @bot.command()
@@ -454,14 +458,15 @@ async def listgen3(ctx):
     for member in okbh.members:
         if gen3role in member.roles:
             gen3s.append(member.display_name)
-    await ctx.send(f"There are {len(gen3s)} members in gen 3:\n{','.join(gen3s)}")
+    await ctx.send(f"📃 There are {len(gen3s)} members in gen 3:\n{','.join(gen3s)}")
 
 
 @bot.command()
 @is_authorized
 async def force_reaction(ctx, channelid: int, msgid: int):
     await reactionfunction(await bot.get_channel(channelid).fetch_message(msgid))
-    await ctx.send("ok")
+    await ctx.send("✅ Done")
+
 
 # owner commands
 @bot.command()
@@ -470,7 +475,7 @@ async def addgen3(ctx, membid):
     okbh = bot.get_guild(746458625068892333)
     gen3role = okbh.get_role(777378971850506272)
     await okbh.get_member(int(membid)).add_roles(gen3role)
-    await ctx.send("ok")
+    await ctx.send("✅ Done")
 
 
 @bot.command()
@@ -479,7 +484,7 @@ async def giverole(ctx, roleid: int):
     role = ctx.guild.get_role(roleid)
     me = ctx.guild.get_member(bot.user.id)
     await me.add_roles(role)
-    await ctx.send("ok")
+    await ctx.send("✅ Done")
 
 
 @bot.command()
@@ -541,8 +546,17 @@ async def on_command(ctx):
 
 @bot.listen()
 async def on_command_error(ctx, error):
-    traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
-    await ctx.send("‼ **Error!** ```" + str(error).replace("@", "\\@") + "```")
+    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+        err = f"⁉ Command `{ctx.message.content}` does not exist."
+        logging.warning(err)
+        await ctx.send(err)
+    elif isinstance(error, discord.ext.commands.errors.NotOwner):
+        err = "❌ You are not authorized to use this command."
+        logging.warning(err)
+        await ctx.send(err)
+    else:
+        traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)
+        await ctx.send("‼ `" + str(error).replace("@", "\\@") + "`")
 
 
 with open('token.txt') as f:  # not on github for obvious reasons
