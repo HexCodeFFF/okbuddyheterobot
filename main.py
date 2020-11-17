@@ -151,8 +151,8 @@ async def on_ready():
 
 # @everyone commands
 @commands.cooldown(1, 10, BucketType.user)
-@bot.command()
-async def help(ctx):
+@bot.command(name="help")
+async def helpcommand(ctx):
     await ctx.send(helptxt)
 
 
@@ -189,10 +189,10 @@ async def femboy(ctx):
 @commands.cooldown(3, 5, BucketType.user)
 @bot.command()
 async def randomreddit(ctx, subreddit):
-    '''
+    """
     await ctx.channel.trigger_typing()
     await ctx.send(random_from_reddit(subreddit))
-    '''
+    """
     await ctx.send("❌ Sorry, this command is temporarily disabled at okbh admin's request.")
 
 
