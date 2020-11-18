@@ -294,6 +294,17 @@ async def diceparse(ctx, *, arg):
         await ctx.send(f"{out}{arg}\n**{final}**")
 
 
+@bot.command()
+@commands.cooldown(1, 10, BucketType.channel)
+async def ninja(ctx):
+    def check(m):
+        return m.channel == ctx.channel
+
+    await ctx.send("https://media.discordapp.net/attachments/212597110770630656/770002200847188039/f1-1-1.gif")
+    await bot.wait_for('message', check=check)
+    await ctx.send("https://media.discordapp.net/attachments/212597110770630656/770002426735886346/f4-1.gif")
+
+
 # admin only commands
 @bot.command()
 @is_authorized
@@ -552,6 +563,10 @@ async def on_command_error(ctx, error):
         await ctx.send(err)
     elif isinstance(error, discord.ext.commands.errors.NotOwner):
         err = "❌ You are not authorized to use this command."
+        logging.warning(err)
+        await ctx.send(err)
+    elif isinstance(error, discord.ext.commands.errors.CommandOnCooldown):
+        err = "⏱ " + str(error).replace("@", "\\@")
         logging.warning(err)
         await ctx.send(err)
     else:
