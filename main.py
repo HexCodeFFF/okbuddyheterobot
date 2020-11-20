@@ -305,6 +305,15 @@ async def ninja(ctx):
     await ctx.send("https://media.discordapp.net/attachments/212597110770630656/770002426735886346/f4-1.gif")
 
 
+@bot.command()
+@commands.cooldown(3, 5, BucketType.user)
+async def clap(ctx, *, text="above"):
+    if text == "above":
+        messages = await ctx.channel.history(limit=1, before=ctx.message).flatten()
+        text = messages[0].content
+    await ctx.send("👏".join(text.split(" ")))
+
+
 # admin only commands
 @bot.command()
 @is_authorized

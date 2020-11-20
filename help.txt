@@ -3,6 +3,7 @@
 - **d!regional** (text) - make text :regional_indicator_b:​:regional_indicator_i:​:regional_indicator_g:
 - **d!owoify** (content) - repwaces aww L and R with W uwu~
 - **d!sparkle** (content) - ✨ *f a n c y    t e x t* ✨
+- **d!clap** (content) - adds👏clapping👏emojis
 - **d!femboy** - sends a femboy
 - **d!catboy** - sends a catboy
 - **d!randomreddit** [subreddit] - grabs a random post from `subreddit`
