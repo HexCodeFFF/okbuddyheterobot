@@ -179,6 +179,14 @@ async def catboy(ctx):
 
 @commands.cooldown(3, 5, BucketType.user)
 @bot.command()
+async def catgirl(ctx):
+    await ctx.channel.trigger_typing()
+    await ctx.send(file=discord.File(random_from_folder("catgirls")))
+    # await ctx.send(random_from_reddit("nekoboys"))
+
+
+@commands.cooldown(3, 5, BucketType.user)
+@bot.command()
 async def femboy(ctx):
     await ctx.channel.trigger_typing()
     await ctx.send(file=discord.File(random_from_folder("femboys")))

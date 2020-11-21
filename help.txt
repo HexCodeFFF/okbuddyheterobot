@@ -6,6 +6,7 @@
 - **d!clap** (content) - adds👏clapping👏emojis
 - **d!femboy** - sends a femboy
 - **d!catboy** - sends a catboy
+- **d!catgirl** - sends a catgirl
 - **d!randomreddit** [subreddit] - grabs a random post from `subreddit`
 - **d!request** [feature] - request new commands or images for the femboy/catboy commands. attachments are supported.
 - **d!adminhelp** - shows admin commands
