@@ -249,8 +249,9 @@ async def macro(ctx, name="list"):
 
 @commands.cooldown(3, 15, BucketType.user)
 @bot.command()
-async def define(ctx, name="list"):
-    if name == "list":
+async def define(ctx, name="List"):
+    name = name.capitalize()
+    if name == "List":
         k = db["definitions"].keys()
         if k:
             out = "📃 Available definitions:\n"
@@ -261,6 +262,8 @@ async def define(ctx, name="list"):
             await ctx.send("❌ No definitions available")
     elif name in db["definitions"]:
         await ctx.send(db["definitions"][name])
+    elif name in db["definitionaliases"]:
+        await ctx.send(db["definitions"][db["definitionaliases"][name]])
     else:
         await ctx.send(f"❌ No entry for `{name}`.")
 
@@ -381,13 +384,13 @@ async def removemacro(ctx, name):
     await ctx.send(out)
 
 
-@bot.command()
+@bot.command(name="ad")
 @is_authorized
 async def adddefinition(ctx, name, *, content):
     if name in db["definitions"]:
         out = f"🔅 `{name}` already defined."
     else:
-        db["definitions"][name] = content
+        db["definitions"][name.capitalize()] = content
         out = f"✅ Added definition for `{name}`."
     save_db()
     logging.info(out.strip())
@@ -400,6 +403,35 @@ async def removedefinition(ctx, name):
     if name in db["definitions"]:
         del db["definitions"][name]
         out = f"✅ Removed definition for `{name}`"
+    else:
+        out = f"❌ `{name}` has no definition."
+
+    save_db()
+    logging.info(out.strip())
+    await ctx.send(out)
+
+@bot.command()
+@is_authorized
+async def addalias(ctx, name, *, content):
+    name = name.capitalize()
+    content = content.capitalize()
+    if name in db["definitionaliases"]:
+        out = f"🔅 `{name}` already defined."
+    else:
+        db["definitionaliases"][name.capitalize()] = content
+        out = f"✅ Added alias `{name}`."
+    save_db()
+    logging.info(out.strip())
+    await ctx.send(out)
+
+
+@bot.command()
+@is_authorized
+async def removealias(ctx, name):
+    name = name.capitalize()
+    if name in db["definitionaliases"]:
+        del db["definitionaliases"][name]
+        out = f"✅ Removed alias `{name}`"
     else:
         out = f"❌ `{name}` has no definition."
 
