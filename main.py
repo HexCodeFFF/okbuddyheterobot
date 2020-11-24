@@ -248,7 +248,7 @@ async def macro(ctx, name="list"):
 
 
 @commands.cooldown(3, 15, BucketType.user)
-@bot.command(name="m")
+@bot.command()
 async def define(ctx, name="list"):
     if name == "list":
         k = db["definitions"].keys()
