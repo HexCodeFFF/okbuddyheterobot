@@ -1,5 +1,5 @@
 - **d!dice** [dice] - parses dice for DnD play and other purposes. Example: `d!dice d20+5`
-- **d!m** [macro] - funny text oga,,, do just `d!m` to list all macros
+- **d!m** (macro) - funny text oga,,, do just `d!m` to list all macros
 - **d!regional** (text) - make text :regional_indicator_b:​:regional_indicator_i:​:regional_indicator_g:
 - **d!owoify** (content) - repwaces aww L and R with W uwu~
 - **d!sparkle** (content) - ✨ *f a n c y    t e x t* ✨

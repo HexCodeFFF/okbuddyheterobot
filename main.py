@@ -247,6 +247,24 @@ async def macro(ctx, name="list"):
         await ctx.send(f"❌ Macro `{name}` does not exist.")
 
 
+@commands.cooldown(3, 15, BucketType.user)
+@bot.command(name="m")
+async def define(ctx, name="list"):
+    if name == "list":
+        k = db["definitions"].keys()
+        if k:
+            out = "📃 Available definitions:\n"
+            for m in k:
+                out += f"`{m}`, "
+            await ctx.send(out.rstrip(", "))
+        else:
+            await ctx.send("❌ No definitions available")
+    elif name in db["definitions"]:
+        await ctx.send(db["definitions"][name])
+    else:
+        await ctx.send(f"❌ No entry for `{name}`.")
+
+
 @commands.cooldown(1, 5, BucketType.user)
 @bot.command()
 async def request(ctx, *, feature):
@@ -357,6 +375,33 @@ async def removemacro(ctx, name):
         out = f"✅ Removed macro `{name}`"
     else:
         out = f"❌ Macro `{name}` does not exist."
+
+    save_db()
+    logging.info(out.strip())
+    await ctx.send(out)
+
+
+@bot.command()
+@is_authorized
+async def adddefinition(ctx, name, *, content):
+    if name in db["definitions"]:
+        out = f"🔅 `{name}` already defined."
+    else:
+        db["definitions"][name] = content
+        out = f"✅ Added definition for `{name}`."
+    save_db()
+    logging.info(out.strip())
+    await ctx.send(out)
+
+
+@bot.command()
+@is_authorized
+async def removedefinition(ctx, name):
+    if name in db["definitions"]:
+        del db["definitions"][name]
+        out = f"✅ Removed definition for `{name}`"
+    else:
+        out = f"❌ `{name}` has no definition."
 
     save_db()
     logging.info(out.strip())
