@@ -261,9 +261,10 @@ async def define(ctx, name="List"):
         else:
             await ctx.send("❌ No definitions available")
     elif name in db["definitions"]:
-        await ctx.send(f"Definition for {name}:\n{db['definitions'][name]}")
+        await ctx.send(f"📚 Definition for `{name}`:\n{db['definitions'][name]}")
     elif name in db["definitionaliases"]:
-        await ctx.send(f"Definition for {db['definitionaliases'][name]}:\n{db['definitions'][db['definitionaliases'][name]]}")
+        await ctx.send(
+            f"📚 Definition for `{db['definitionaliases'][name]}`:\n{db['definitions'][db['definitionaliases'][name]]}")
     else:
         await ctx.send(f"❌ No definition available for `{name}`. Request one with `d!request`.")
 
@@ -411,6 +412,7 @@ async def removedefinition(ctx, name):
     save_db()
     logging.info(out.strip())
     await ctx.send(out)
+
 
 @bot.command()
 @is_authorized
