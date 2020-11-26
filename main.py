@@ -265,7 +265,7 @@ async def define(ctx, name="List"):
     elif name in db["definitionaliases"]:
         await ctx.send(db["definitions"][db["definitionaliases"][name]])
     else:
-        await ctx.send(f"❌ No entry for `{name}`.")
+        await ctx.send(f"❌ No definition available for `{name}`. Request one with `d!request`.")
 
 
 @commands.cooldown(1, 5, BucketType.user)
@@ -387,10 +387,11 @@ async def removemacro(ctx, name):
 @bot.command(name="ad")
 @is_authorized
 async def adddefinition(ctx, name, *, content):
+    name = name.capitalize()
     if name in db["definitions"]:
         out = f"🔅 `{name}` already defined."
     else:
-        db["definitions"][name.capitalize()] = content
+        db["definitions"][name] = content
         out = f"✅ Added definition for `{name}`."
     save_db()
     logging.info(out.strip())
@@ -400,6 +401,7 @@ async def adddefinition(ctx, name, *, content):
 @bot.command()
 @is_authorized
 async def removedefinition(ctx, name):
+    name = name.capitalize()
     if name in db["definitions"]:
         del db["definitions"][name]
         out = f"✅ Removed definition for `{name}`"
