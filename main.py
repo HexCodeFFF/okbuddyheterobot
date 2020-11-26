@@ -261,9 +261,9 @@ async def define(ctx, name="List"):
         else:
             await ctx.send("❌ No definitions available")
     elif name in db["definitions"]:
-        await ctx.send(db["definitions"][name])
+        await ctx.send(f"Definition for {name}:\n{db['definitions'][name]}")
     elif name in db["definitionaliases"]:
-        await ctx.send(db["definitions"][db["definitionaliases"][name]])
+        await ctx.send(f"Definition for {db['definitionaliases'][name]}:\n{db['definitions'][db['definitionaliases'][name]]}")
     else:
         await ctx.send(f"❌ No definition available for `{name}`. Request one with `d!request`.")
 
@@ -614,6 +614,7 @@ async def nick(ctx, *, nickname="gay ass doge"):
 @bot.command()
 @commands.is_owner()
 async def die(ctx):
+    await ctx.send("✅ Shutting down.")
     await bot.close()
 
 
