@@ -43,7 +43,9 @@
         "femboy": "https://cdn.discordapp.com/attachments/746801666124415108/778477467312062484/image0.gif",
         "britishtroll": "https://cdn.discordapp.com/attachments/746458625635123352/780161416317108224/SPOILER_6ab-1.png",
         "nooil": "https://cdn.discordapp.com/attachments/746896412712763502/780562760702099486/Screen_Shot_2020-11-23_at_2.36.12_PM.png",
-        "imho": "https://cdn.discordapp.com/attachments/746460526158282780/780857484930842654/video0.mov"
+        "imho": "https://cdn.discordapp.com/attachments/746460526158282780/780857484930842654/video0.mov",
+        "ihatefroge": "https://cdn.discordapp.com/attachments/746896412712763502/781345159798718524/unknown.png",
+        "dissolve": "https://cdn.discordapp.com/attachments/746460526158282780/781632003397124136/IMG_20201126_145800.jpg"
     },
     "definitions": {
         "LGBTQIA+": "Lesbian, Gay, Bisexual, Transgender, Queer/Questioning, Intersex, Asexual. An umbrella term for the queer community.",
@@ -109,7 +111,8 @@
         "Gynoromantic": "Someone who has romantic attraction to women.",
         "Androromantic": "Someone who has romantic attraction to men.",
         "Terf": "Trans-Exclusionary Radical Feminist.",
-        "Chaser": "Someone who intensely fetishizes and often invalidates transgender people."
+        "Chaser": "Someone who intensely fetishizes and often invalidates transgender people.",
+        "Allosexual": "Someone who generally experiences sexual attraction; not asexual."
     },
     "definitionaliases": {
         "Enby": "Non-binary",
@@ -150,6 +153,7 @@
         "Ace-spec": "Aspec",
         "Aro-spec": "Arospec",
         "Aromantic spectrum": "Arospec",
-        "Trans chaser": "Chaser"
+        "Trans chaser": "Chaser",
+        "Allo": "Allosexual"
     }
 }

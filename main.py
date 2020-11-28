@@ -15,7 +15,8 @@ from py_expression_eval import Parser
 import praw
 import itertools
 from discord.ext.commands.cooldowns import BucketType  # for cooldown? idfk
-
+# mute: https://ptb.discord.com/channels/746458625068892333/748589675249139812/781964888885035038
+# warn: https://ptb.discord.com/channels/746458625068892333/748589675249139812/782031418561789995
 intents = discord.Intents.default()
 intents.members = True
 
@@ -98,6 +99,18 @@ def is_authorized(function):
     return wrapper
 
 
+def no_gen(function):
+    @wraps(function)
+    async def wrapper(ctx, *args, **kwargs):
+        if str(ctx.message.channel.id) not in ["746458625635123352", "746460470306799668", "732309590410002456"]:
+            await function(ctx, *args, **kwargs)
+        else:
+            await ctx.message.delete()
+            await ctx.author.send("❌ This command is not allowed in general chats.")
+
+    return wrapper
+
+
 async def reassign_gen3(toadd="random", toremove="random"):
     okbh = bot.get_guild(746458625068892333)
     gen3role = okbh.get_role(777378971850506272)
@@ -150,6 +163,12 @@ async def on_ready():
 
 
 # @everyone commands
+@bot.command()
+@no_gen
+async def nogen(ctx):
+    await ctx.send("hello")
+
+
 @commands.cooldown(1, 10, BucketType.user)
 @bot.command(name="help")
 async def helpcommand(ctx):
