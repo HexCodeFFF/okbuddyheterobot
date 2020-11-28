@@ -201,7 +201,7 @@ async def randomreddit(ctx, subreddit):
     await ctx.channel.trigger_typing()
     await ctx.send(random_from_reddit(subreddit))
     """
-    await ctx.send("❌ Sorry, this command is temporarily disabled at okbh admin's request.")
+    await ctx.send("❌ Sorry, this command is permanently disabled at okbh admin's request.")
 
 
 @commands.cooldown(3, 5, BucketType.user)
@@ -408,7 +408,6 @@ async def removedefinition(ctx, name):
         out = f"✅ Removed definition for `{name}`"
     else:
         out = f"❌ `{name}` has no definition."
-
     save_db()
     logging.info(out.strip())
     await ctx.send(out)
@@ -635,17 +634,15 @@ async def delete(ctx, msgid):
     await msg.delete()
 
 
-@bot.command()
-@commands.is_owner()
-async def pin(ctx, msgid):
-    msg = await ctx.channel.fetch_message(int(msgid))
-    await msg.pin()
-
-
 @bot.listen()
 async def on_message(msg):
     if str(msg.channel.id) in db["channels"]:  # suggestions-meta
-        await reactionfunction(msg)
+        try:
+            await reactionfunction(msg)
+            logging.info(f"Added reaction to {msg.id}")
+        except Exception as e:
+            logging.error(f"Failed to add reaction to {msg.id}\n{e}")
+            traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
 
 
 @bot.listen()

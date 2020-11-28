@@ -1,4 +1,5 @@
 **Admin only commands:**
+*some of these commands are not as polished as global commands*
 - **d!addadmin** [user(s)] - adds one or more users to the admin list
 - **d!removeadmin** [user(s)] - removes one or more users from the admin list
 - **d!listadmins** - lists current admins **THIS WILL PING ALL ADDED ADMINS!**
@@ -10,4 +11,8 @@
 - **d!forcegen3** (toadd id) (toremove id) - forces the hourly reassignment of gen 3. optionally you can choose an ID of a member to add or remove
 - **d!listgen3** - lists all members with the gen 3 role.
 - **d!forcereaction** [channelid] [msgid] - adds the upvote/downvote reactions to message with id `msgid` in channel `channelid`
+- **d!ad** [word] [definition] - Adds a word and its definition to the `d!define` dictionary.
+- **d!removedefinition** [word] - Removes a word from the `d!define` dictionary.
+- **d!addalias** [alias] [word] - Adds an alternate spelling that will link to the definition of `word`.
+- **d!removealias** [alias] - Removes the alias.
 **Bot written by Melody**
